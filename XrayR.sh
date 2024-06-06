@@ -15,6 +15,8 @@ if [[ -f /etc/redhat-release ]]; then
     release="centos"
 elif cat /etc/issue | grep -Eqi "debian"; then
     release="debian"
+elif cat /etc/issue | grep -Eqi "Armbian"; then
+    release="armbian"
 elif cat /etc/issue | grep -Eqi "ubuntu"; then
     release="ubuntu"
 elif cat /etc/issue | grep -Eqi "centos|red hat|redhat"; then
@@ -47,9 +49,9 @@ elif [[ x"${release}" == x"ubuntu" ]]; then
     if [[ ${os_version} -lt 16 ]]; then
         echo -e "${red}请使用 Ubuntu 16 或更高版本的系统！${plain}\n" && exit 1
     fi
-elif [[ x"${release}" == x"debian" ]]; then
+elif [[ x"${release}" == x"debian" || x"${release}" == x"armbian" ]]; then
     if [[ ${os_version} -lt 8 ]]; then
-        echo -e "${red}请使用 Debian 8 或更高版本的系统！${plain}\n" && exit 1
+        echo -e "${red}请使用 Debian//Armbian 8 或更高版本的系统！${plain}\n" && exit 1
     fi
 fi
 
