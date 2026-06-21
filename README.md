@@ -3,21 +3,21 @@ A Xray backend framework that can easily support many panels.
 
 一个基于Xray的后端框架，支持V2ay,Trojan,Shadowsocks协议，极易扩展，支持多面板对接
 
-Find the source code here: [XrayR-project/XrayR](https://github.com/XrayR-project/XrayR)
+Find the source code here: [waevciuwecp/XrayR](https://github.com/waevciuwecp/XrayR)
 
 # 详细使用教程
 
-[教程](https://xrayr-project.github.io/XrayR-doc/)
+[教程](https://waevciuwecp.github.io/XrayR-doc/)
 
 # 一键安装
 
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/XrayR-project/XrayR-release/master/install.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/waevciuwecp/XrayR-release/main/install.sh)
 ```
 # Docker 安装
 
 ```
-docker pull ghcr.io/xrayr-project/xrayr:latest && docker run --restart=always --name xrayr -d -v ${PATH_TO_CONFIG}/config.yml:/etc/XrayR/config.yml --network=host ghcr.io/xrayr-project/xrayr:latest
+docker pull ghcr.io/yaoyinying/xrayr:latest && docker run --restart=always --name xrayr -d -v ${PATH_TO_CONFIG}/config.yml:/etc/XrayR/config.yml --network=host ghcr.io/yaoyinying/xrayr:latest
 ```
 
 # Docker compose 安装
@@ -27,7 +27,7 @@ curl -fsSL https://get.docker.com | bash -s docker
 curl -L "https://github.com/docker/compose/releases/download/1.26.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 ```
-1. `git clone https://github.com/XrayR-project/XrayR-release`
+1. `git clone https://github.com/waevciuwecp/XrayR-release`
 2. `cd XrayR-release`
 3. 编辑config。
 配置文件基本格式如下，Nodes下可以同时添加多个面板，多个节点配置信息，只需添加相同格式的Nodes item即可。
@@ -38,7 +38,7 @@ Log:
   AccessPath: # /etc/XrayR/access.Log
   ErrorPath: # /etc/XrayR/error.log
 DnsConfigPath: # /etc/XrayR/dns.json Path to dns config
-ConnetionConfig:
+ConnectionConfig:
   Handshake: 4 # Handshake time limit, Second
   ConnIdle: 10 # Connection idle time limit, Second
   UplinkOnly: 2 # Time limit when the connection downstream is closed, Second
@@ -51,10 +51,9 @@ Nodes:
       ApiHost: "http://127.0.0.1:667"
       ApiKey: "123"
       NodeID: 41
-      NodeType: V2ray # Node type: V2ray, Shadowsocks, Trojan
+      NodeType: V2ray # Node type: V2ray, Vmess, Vless, Shadowsocks, Trojan, WireGuard, Hysteria, SOCKS, HTTP
       Timeout: 30 # Timeout for the api request
       EnableVless: false # Enable Vless for V2ray Type
-      EnableXTLS: false # Enable XTLS for V2ray and Trojan
       SpeedLimit: 0 # Mbps, Local settings will replace remote settings, 0 means disable
       DeviceLimit: 0 # Local settings will replace remote settings, 0 means disable
       RuleListPath: # /etc/XrayR/rulelist Path to local rulelist file
@@ -88,10 +87,9 @@ Nodes:
   #     ApiHost: "http://127.0.0.1:668"
   #     ApiKey: "123"
   #     NodeID: 4
-  #     NodeType: Shadowsocks # Node type: V2ray, Shadowsocks, Trojan
+  #     NodeType: Shadowsocks # Node type: V2ray, Vmess, Vless, Shadowsocks, Trojan, WireGuard, Hysteria, SOCKS, HTTP
   #     Timeout: 30 # Timeout for the api request
   #     EnableVless: false # Enable Vless for V2ray Type
-  #     EnableXTLS: false # Enable XTLS for V2ray and Trojan
   #     SpeedLimit: 0 # Mbps, Local settings will replace remote settings
   #     DeviceLimit: 0 # Local settings will replace remote settings
   #   ControllerConfig:
