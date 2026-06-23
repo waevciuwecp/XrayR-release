@@ -1,0 +1,97 @@
+# =============================================================================
+# XrayR Example Configuration
+# =============================================================================
+# This is a full working example with two panel nodes.
+# Copy this to /etc/XrayR/config.yml and edit the placeholders.
+#
+# Docs: https://xtls.github.io/
+# Wiki: https://github.com/XrayR-project/XrayR/wiki
+
+Log:
+  Level: warning                           # none | error | warning | info | debug
+  AccessPath:                              # e.g. /etc/XrayR/access.log
+  ErrorPath:                               # e.g. /etc/XrayR/error.log
+
+# Optional: override Xray-core DNS / routing configs
+DnsConfigPath:                             # e.g. /etc/XrayR/dns.json
+RouteConfigPath:                           # e.g. /etc/XrayR/route.json
+
+# Optional: custom inbound / outbound appended to each node
+InboundConfigPath:                         # e.g. /etc/XrayR/custom_inbound.json
+OutboundConfigPath:                        # e.g. /etc/XrayR/custom_outbound.json
+
+ConnectionConfig:
+  Handshake: 4                             # Handshake timeout (seconds)
+  ConnIdle: 30                             # Idle timeout (seconds)
+  UplinkOnly: 2                            # Timeout when downstream is closed
+  DownlinkOnly: 4                          # Timeout when uplink is closed
+  BufferSize: 64                           # Per-connection buffer (kB)
+
+Nodes:
+  # -------------------------------------------------------------------------
+  # Node 1 — V2ray (VMess + VLESS) with TLS + CDN via DNS cert
+  # -------------------------------------------------------------------------
+  -
+    PanelType: "SSpanel"                   # SSpanel | V2board | NewV2board | PMpanel | Proxypanel | V2RaySocks
+    ApiConfig:
+      ApiHost: "https://your-panel.com"     # Panel API base URL
+      ApiKey: "CHANGE_ME_API_KEY"           # Panel API key
+      NodeID: 1                             # Numeric node ID from panel
+      NodeType: V2ray                       # V2ray | Vmess | Vless | Shadowsocks | Trojan | WireGuard | Hysteria | SOCKS | HTTP
+      Timeout: 30                           # API request timeout (seconds)
+      EnableVless: true                     # Also generate VLESS inbound
+      EnableXTLS: false                     # Enable XTLS (requires dedicated port / fallback setup)
+      SpeedLimit: 0                         # Per-user speed limit (Mbps), 0 = off
+      DeviceLimit: 0                        # Per-user device limit, 0 = off
+      RuleListPath:                         # e.g. /etc/XrayR/rulelist
+
+    ControllerConfig:
+      ListenIP: "0.0.0.0"                  # Accept connections on this IP
+      SendIP: "0.0.0.0"                    # Source IP for outbound packets
+      UpdatePeriodic: 60                   # Pull user list every N seconds
+      EnableDNS: false                     # Use custom dns.json below
+      DNSType: AsIs                        # AsIs | UseIP | UseIPv4 | UseIPv6
+      EnableProxyProtocol: false           # Send PROXY protocol to backend (WS/TCP only)
+      EnableFallback: false                # Fallback for Trojan / VLESS
+      FallBackConfigs:
+        -
+          SNI:                             # Match SNI, empty = any
+          Alpn:                            # Match ALPN, empty = any
+          Path:                            # Match HTTP path, empty = any
+          Dest: 80                         # Fallback destination port
+          ProxyProtocolVer: 0              # PROXY protocol version (0 = off)
+
+      CertConfig:
+        CertMode: dns                      # none | file | http | tls | dns
+        CertDomain: "node1.your-domain.com"  # TLS certificate domain
+        CertFile: /etc/XrayR/cert/node1.cert
+        KeyFile: /etc/XrayR/cert/node1.key
+        Provider: cloudflare              # DNS provider (alidns, cloudflare, dnspod, ...)
+        Email: "you@email.com"
+        DNSEnv:
+          CLOUDFLARE_EMAIL: "you@email.com"
+          CLOUDFLARE_API_KEY: "CHANGE_ME_CF_API_KEY"
+
+  # -------------------------------------------------------------------------
+  # Node 2 — Shadowsocks (uncomment and edit to use)
+  # -------------------------------------------------------------------------
+  # -
+  #   PanelType: "NewV2board"
+  #   ApiConfig:
+  #     ApiHost: "https://your-panel.com"
+  #     ApiKey: "CHANGE_ME_API_KEY"
+  #     NodeID: 2
+  #     NodeType: Shadowsocks
+  #     Timeout: 30
+  #     EnableVless: false
+  #     SpeedLimit: 100        # 100 Mbps cap per user
+  #     DeviceLimit: 3         # max 3 devices per user
+  #
+  #   ControllerConfig:
+  #     ListenIP: "0.0.0.0"
+  #     SendIP: "0.0.0.0"
+  #     UpdatePeriodic: 60
+  #     EnableDNS: false
+  #     DNSType: AsIs
+  #     CertConfig:
+  #       CertMode: none        # Shadowsocks doesn't require TLS

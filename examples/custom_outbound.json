@@ -1,0 +1,314 @@
+[
+    // =========================================================================
+    // Direct (Freedom) — send traffic directly. The default-first outbound.
+    // Add a UseIPv6 variant for routing IPv6-only destinations (e.g. Netflix).
+    // =========================================================================
+    {
+        "tag": "IPv4_out",
+        "protocol": "freedom",
+        "settings": {}
+    },
+    {
+        "tag": "IPv6_out",
+        "protocol": "freedom",
+        "settings": {
+            "domainStrategy": "UseIPv6"
+        }
+    },
+
+    // =========================================================================
+    // SOCKS5 Outbound — tunnel traffic through an upstream SOCKS5 server.
+    // Common use case: route traffic through WARP (localhost:1080).
+    // =========================================================================
+    {
+        "tag": "socks5-warp",
+        "protocol": "socks",
+        "settings": {
+            "servers": [
+                {
+                    "address": "127.0.0.1",
+                    "port": 1080
+                }
+            ]
+        }
+    },
+
+    // =========================================================================
+    // HTTP Outbound — tunnel traffic through an upstream HTTP/HTTPS proxy
+    // =========================================================================
+    // {
+    //     "tag": "http_proxy",
+    //     "protocol": "http",
+    //     "settings": {
+    //         "servers": [
+    //             {
+    //                 "address": "CHANGE_ME_PROXY_IP",
+    //                 "port": 8080,
+    //                 "users": [
+    //                     {
+    //                         "user": "CHANGE_ME_USER",
+    //                         "pass": "CHANGE_ME_PASS"
+    //                     }
+    //                 ]
+    //             }
+    //         ]
+    //     }
+    // },
+
+    // =========================================================================
+    // Shadowsocks Outbound — forward traffic to an upstream SS server.
+    // NOTE: server params MUST be inside a "servers" array, otherwise
+    // Xray core panics with "0 Shadowsocks server configured."
+    // =========================================================================
+    {
+        "tag": "ss_to_jellyfish",
+        "sendThrough": "0.0.0.0",
+        "protocol": "shadowsocks",
+        "settings": {
+            "servers": [
+                {
+                    "address": "CHANGE_ME_SS_REMOTE_IP",
+                    "port": 30001,
+                    "method": "aes-256-gcm",
+                    "password": "CHANGE_ME_SS_REMOTE_PASS",
+                    "level": 0,
+                    "email": "you@email.com"
+                }
+            ]
+        }
+    },
+
+    // =========================================================================
+    // Shadowsocks 2022 Outbound — modern AEAD, base64-encoded key
+    // =========================================================================
+    // {
+    //     "tag": "ss2022_out",
+    //     "protocol": "shadowsocks",
+    //     "settings": {
+    //         "servers": [
+    //             {
+    //                 "address": "CHANGE_ME_SS_REMOTE_IP",
+    //                 "port": 8388,
+    //                 "method": "2022-blake3-aes-256-gcm",
+    //                 "password": "CHANGE_ME_BASE64_KEY",
+    //                 "level": 0
+    //             }
+    //         ]
+    //     }
+    // },
+
+    // =========================================================================
+    // VMess Outbound — connect to an upstream V2ray/VMess server
+    // =========================================================================
+    // {
+    //     "tag": "vmess_out",
+    //     "protocol": "vmess",
+    //     "settings": {
+    //         "vnext": [
+    //             {
+    //                 "address": "CHANGE_ME_VMESS_IP",
+    //                 "port": 10086,
+    //                 "users": [
+    //                     {
+    //                         "id": "CHANGE_ME_UUID",
+    //                         "security": "auto",
+    //                         "level": 0
+    //                     }
+    //                 ]
+    //             }
+    //         ]
+    //     },
+    //     "streamSettings": {
+    //         "network": "ws",
+    //         "wsSettings": {
+    //             "path": "/ws-path"
+    //         }
+    //     }
+    // },
+
+    // =========================================================================
+    // VLESS Outbound — connect to an upstream VLESS server
+    // =========================================================================
+    // {
+    //     "tag": "vless_out",
+    //     "protocol": "vless",
+    //     "settings": {
+    //         "vnext": [
+    //             {
+    //                 "address": "CHANGE_ME_VLESS_IP",
+    //                 "port": 443,
+    //                 "users": [
+    //                     {
+    //                         "id": "CHANGE_ME_UUID",
+    //                         "flow": "xtls-rprx-vision",
+    //                         "encryption": "none",
+    //                         "level": 0
+    //                     }
+    //                 ]
+    //             }
+    //         ]
+    //     },
+    //     "streamSettings": {
+    //         "network": "tcp",
+    //         "security": "reality",
+    //         "realitySettings": {
+    //             "serverName": "www.microsoft.com",
+    //             "fingerprint": "chrome",
+    //             "publicKey": "CHANGE_ME_REALITY_PUBLIC_KEY",
+    //             "shortId": "CHANGE_ME_SHORT_ID",
+    //             "spiderX": "/"
+    //         }
+    //     }
+    // },
+
+    // =========================================================================
+    // VLESS + gRPC Outbound — connect via gRPC transport
+    // =========================================================================
+    // {
+    //     "tag": "vless_grpc_out",
+    //     "protocol": "vless",
+    //     "settings": {
+    //         "vnext": [
+    //             {
+    //                 "address": "CHANGE_ME_DOMAIN",
+    //                 "port": 443,
+    //                 "users": [
+    //                     {
+    //                         "id": "CHANGE_ME_UUID",
+    //                         "encryption": "none",
+    //                         "level": 0
+    //                     }
+    //                 ]
+    //             }
+    //         ]
+    //     },
+    //     "streamSettings": {
+    //         "network": "grpc",
+    //         "security": "tls",
+    //         "grpcSettings": {
+    //             "serviceName": "grpc-svc"
+    //         }
+    //     }
+    // },
+
+    // =========================================================================
+    // Trojan Outbound — connect to an upstream Trojan server
+    // =========================================================================
+    // {
+    //     "tag": "trojan_out",
+    //     "protocol": "trojan",
+    //     "settings": {
+    //         "servers": [
+    //             {
+    //                 "address": "CHANGE_ME_TROJAN_IP",
+    //                 "port": 443,
+    //                 "password": "CHANGE_ME_TROJAN_PASS",
+    //                 "level": 0,
+    //                 "email": "you@email.com"
+    //             }
+    //         ]
+    //     },
+    //     "streamSettings": {
+    //         "network": "tcp",
+    //         "security": "tls",
+    //         "tlsSettings": {
+    //             "serverName": "node1.your-domain.com"
+    //         }
+    //     }
+    // },
+
+    // =========================================================================
+    // Hysteria2 Outbound — connect via QUIC (good for lossy / mobile networks)
+    // =========================================================================
+    // {
+    //     "tag": "hysteria2_out",
+    //     "protocol": "hysteria2",
+    //     "settings": {
+    //         "address": "CHANGE_ME_HYSTERIA_IP",
+    //         "port": 8443,
+    //         "password": "CHANGE_ME_HYSTERIA_PASS",
+    //         "serverAddress": "CHANGE_ME_DOMAIN"
+    //     },
+    //     "streamSettings": {
+    //         "security": "tls",
+    //         "tlsSettings": {
+    //             "serverName": "node1.your-domain.com"
+    //         }
+    //     }
+    // },
+
+    // =========================================================================
+    // WireGuard Outbound — tunnel traffic through a WireGuard interface
+    // =========================================================================
+    // {
+    //     "tag": "wg_out",
+    //     "protocol": "wireguard",
+    //     "settings": {
+    //         "secretKey": "CHANGE_ME_WG_PRIVATE_KEY",
+    //         "address": ["172.16.0.2/32"],
+    //         "peers": [
+    //             {
+    //                 "endpoint": "CHANGE_ME_WG_ENDPOINT",
+    //                 "publicKey": "CHANGE_ME_PEER_PUBLIC_KEY",
+    //                 "preSharedKey": "CHANGE_ME_PSK",
+    //                 "keepAlive": 25
+    //             }
+    //         ],
+    //         "mtu": 1420
+    //     }
+    // },
+
+    // =========================================================================
+    // TUIC Outbound — connect via QUIC-based TUIC protocol
+    // =========================================================================
+    // {
+    //     "tag": "tuic_out",
+    //     "protocol": "tuic",
+    //     "settings": {
+    //         "servers": [
+    //             {
+    //                 "address": "CHANGE_ME_TUIC_IP",
+    //                 "port": 9443,
+    //                 "uuid": "CHANGE_ME_UUID",
+    //                 "password": "CHANGE_ME_TUIC_PASS",
+    //                 "congestion": "bbr",
+    //                 "heartbeat": 10000
+    //             }
+    //         ]
+    //     },
+    //     "streamSettings": {
+    //         "security": "tls",
+    //         "tlsSettings": {
+    //             "serverName": "node1.your-domain.com"
+    //         }
+    //     }
+    // },
+
+    // =========================================================================
+    // DNS Outbound — forward DNS queries to an external DNS server
+    // =========================================================================
+    // {
+    //     "tag": "dns_out",
+    //     "protocol": "dns",
+    //     "settings": {
+    //         "address": "1.1.1.1",
+    //         "port": 53,
+    //         "network": "tcp"
+    //     }
+    // },
+
+    // =========================================================================
+    // Blackhole — silently drop matching traffic.
+    // Used with route.json to block private IPs, BitTorrent, ads, etc.
+    // Set response.type to "http" or "none".
+    // =========================================================================
+    {
+        "tag": "block",
+        "protocol": "blackhole",
+        "settings": {
+            "response": {
+                "type": "none"
+            }
+        }
+    }
+]

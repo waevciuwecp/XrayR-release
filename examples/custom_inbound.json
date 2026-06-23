@@ -1,0 +1,296 @@
+[
+    // =========================================================================
+    // SOCKS5 Inbound — expose a local SOCKS5 proxy on the server
+    // =========================================================================
+    {
+        "listen": "127.0.0.1",
+        "port": 1080,
+        "protocol": "socks",
+        "settings": {
+            "auth": "password",
+            "accounts": [
+                {
+                    "user": "CHANGE_ME_USER",
+                    "pass": "CHANGE_ME_PASS"
+                }
+            ],
+            "udp": true,
+            "userLevel": 0
+        },
+        "tag": "socks_in"
+    },
+
+    // =========================================================================
+    // HTTP Inbound — local HTTP/HTTPS proxy (no auth)
+    // =========================================================================
+    {
+        "listen": "127.0.0.1",
+        "port": 8080,
+        "protocol": "http",
+        "settings": {
+            "userLevel": 0
+        },
+        "tag": "http_in"
+    },
+
+    // =========================================================================
+    // Dokodemo-Door Inbound — forward a local port to a fixed remote destination.
+    // Useful for transparent proxying, port forwarding, or game servers.
+    // =========================================================================
+    {
+        "listen": "127.0.0.1",
+        "port": 9000,
+        "protocol": "dokodemo-door",
+        "settings": {
+            "address": "1.1.1.1",
+            "port": 443,
+            "network": "tcp"
+        },
+        "tag": "doko_in"
+    }
+
+    // =========================================================================
+    // Shadowsocks Inbound (standalone, not panel-managed)
+    // =========================================================================
+    // {
+    //     "listen": "0.0.0.0",
+    //     "port": 8388,
+    //     "protocol": "shadowsocks",
+    //     "settings": {
+    //         "method": "aes-256-gcm",
+    //         "password": "CHANGE_ME_SS_PASS",
+    //         "network": "tcp,udp"
+    //     },
+    //     "tag": "ss_in"
+    // },
+
+    // =========================================================================
+    // Shadowsocks 2022 Inbound — modern AEAD ciphers, multi-user via "users"
+    // =========================================================================
+    // {
+    //     "listen": "0.0.0.0",
+    //     "port": 8388,
+    //     "protocol": "shadowsocks",
+    //     "settings": {
+    //         "method": "2022-blake3-aes-256-gcm",
+    //         "password": "CHANGE_ME_SS_BASE64_KEY",
+    //         "network": "tcp,udp"
+    //     },
+    //     "tag": "ss2022_in"
+    // },
+
+    // =========================================================================
+    // VMess Inbound (standalone) — TCP + WebSocket, with optional TLS
+    // =========================================================================
+    // {
+    //     "listen": "0.0.0.0",
+    //     "port": 10086,
+    //     "protocol": "vmess",
+    //     "settings": {
+    //         "clients": [
+    //             {
+    //                 "id": "CHANGE_ME_UUID",
+    //                 "level": 0,
+    //                 "email": "you@email.com"
+    //             }
+    //         ]
+    //     },
+    //     "streamSettings": {
+    //         "network": "ws",
+    //         "wsSettings": {
+    //             "path": "/ws-path"
+    //         }
+    //     },
+    //     "tag": "vmess_ws_in"
+    // },
+
+    // =========================================================================
+    // VLESS Inbound — TCP + XTLS Vision (direct, no CDN)
+    // =========================================================================
+    // {
+    //     "listen": "0.0.0.0",
+    //     "port": 443,
+    //     "protocol": "vless",
+    //     "settings": {
+    //         "clients": [
+    //             {
+    //                 "id": "CHANGE_ME_UUID",
+    //                 "flow": "xtls-rprx-vision",
+    //                 "level": 0,
+    //                 "email": "you@email.com"
+    //             }
+    //         ],
+    //         "decryption": "none",
+    //         "fallbacks": [
+    //             {
+    //                 "dest": 80
+    //             }
+    //         ]
+    //     },
+    //     "streamSettings": {
+    //         "network": "tcp",
+    //         "security": "reality",
+    //         "realitySettings": {
+    //             "dest": "www.microsoft.com:443",
+    //             "serverNames": [
+    //                 "www.microsoft.com"
+    //             ],
+    //             "privateKey": "CHANGE_ME_REALITY_PRIVATE_KEY",
+    //             "shortIds": [
+    //                 "CHANGE_ME_SHORT_ID"
+    //             ]
+    //         }
+    //     },
+    //     "tag": "vless_reality_in"
+    // },
+
+    // =========================================================================
+    // VLESS + gRPC — good for CDN passthrough with Cloudflare
+    // =========================================================================
+    // {
+    //     "listen": "0.0.0.0",
+    //     "port": 443,
+    //     "protocol": "vless",
+    //     "settings": {
+    //         "clients": [
+    //             {
+    //                 "id": "CHANGE_ME_UUID",
+    //                 "level": 0,
+    //                 "email": "you@email.com"
+    //             }
+    //         ],
+    //         "decryption": "none"
+    //     },
+    //     "streamSettings": {
+    //         "network": "grpc",
+    //         "security": "tls",
+    //         "tlsSettings": {
+    //             "serverName": "node1.your-domain.com",
+    //             "certificates": [
+    //                 {
+    //                     "certificateFile": "/etc/XrayR/cert/node1.cert",
+    //                     "keyFile": "/etc/XrayR/cert/node1.key"
+    //                 }
+    //             ]
+    //         },
+    //         "grpcSettings": {
+    //             "serviceName": "grpc-svc"
+    //         }
+    //     },
+    //     "tag": "vless_grpc_in"
+    // },
+
+    // =========================================================================
+    // Trojan Inbound — TCP + TLS, simple password-based auth
+    // =========================================================================
+    // {
+    //     "listen": "0.0.0.0",
+    //     "port": 443,
+    //     "protocol": "trojan",
+    //     "settings": {
+    //         "clients": [
+    //             {
+    //                 "password": "CHANGE_ME_TROJAN_PASS",
+    //                 "level": 0,
+    //                 "email": "you@email.com"
+    //             }
+    //         ],
+    //         "fallbacks": [
+    //             {
+    //                 "dest": 80
+    //             }
+    //         ]
+    //     },
+    //     "streamSettings": {
+    //         "network": "tcp",
+    //         "security": "tls",
+    //         "tlsSettings": {
+    //             "serverName": "node1.your-domain.com",
+    //             "certificates": [
+    //                 {
+    //                     "certificateFile": "/etc/XrayR/cert/node1.cert",
+    //                     "keyFile": "/etc/XrayR/cert/node1.key"
+    //                 }
+    //             ]
+    //         }
+    //     },
+    //     "tag": "trojan_tls_in"
+    // },
+
+    // =========================================================================
+    // WireGuard Inbound — tunnel traffic from a WireGuard peer
+    // =========================================================================
+    // {
+    //     "listen": "0.0.0.0",
+    //     "port": 51820,
+    //     "protocol": "wireguard",
+    //     "settings": {
+    //         "secretKey": "CHANGE_ME_WG_PRIVATE_KEY",
+    //         "address": ["172.16.0.1/24"],
+    //         "peers": [
+    //             {
+    //                 "publicKey": "CHANGE_ME_PEER_PUBLIC_KEY",
+    //                 "allowedIPs": ["172.16.0.2/32"]
+    //             }
+    //         ]
+    //     },
+    //     "tag": "wg_in"
+    // },
+
+    // =========================================================================
+    // Hysteria2 Inbound — QUIC-based, good for lossy networks
+    // =========================================================================
+    // {
+    //     "listen": "0.0.0.0",
+    //     "port": 8443,
+    //     "protocol": "hysteria2",
+    //     "settings": {
+    //         "password": "CHANGE_ME_HYSTERIA_PASS"
+    //     },
+    //     "streamSettings": {
+    //         "security": "tls",
+    //         "tlsSettings": {
+    //             "serverName": "node1.your-domain.com",
+    //             "certificates": [
+    //                 {
+    //                     "certificateFile": "/etc/XrayR/cert/node1.cert",
+    //                     "keyFile": "/etc/XrayR/cert/node1.key"
+    //                 }
+    //             ]
+    //         }
+    //     },
+    //     "tag": "hysteria2_in"
+    // },
+
+    // =========================================================================
+    // TUIC Inbound — QUIC-based proxy protocol, lightweight alternative
+    // =========================================================================
+    // {
+    //     "listen": "0.0.0.0",
+    //     "port": 9443,
+    //     "protocol": "tuic",
+    //     "settings": {
+    //         "users": [
+    //             {
+    //                 "uuid": "CHANGE_ME_UUID",
+    //                 "password": "CHANGE_ME_TUIC_PASS"
+    //             }
+    //         ],
+    //         "congestion": "bbr",
+    //         "heartbeat": 10000
+    //     },
+    //     "streamSettings": {
+    //         "security": "tls",
+    //         "tlsSettings": {
+    //             "serverName": "node1.your-domain.com",
+    //             "certificates": [
+    //                 {
+    //                     "certificateFile": "/etc/XrayR/cert/node1.cert",
+    //                     "keyFile": "/etc/XrayR/cert/node1.key"
+    //                 }
+    //             ]
+    //         }
+    //     },
+    //     "tag": "tuic_in"
+    // }
+]

@@ -1,0 +1,16 @@
+{
+    // =========================================================================
+    // DNS Configuration
+    // =========================================================================
+    // Docs: https://xtls.github.io/config/dns.html
+    //
+    // "tag" is referenced by inbound's "dns" setting.
+    // Servers are tried in order; the first match wins.
+
+    "servers": [
+        "1.1.1.1",
+        "8.8.8.8",
+        "localhost"
+    ],
+    "tag": "dns_inbound"
+}

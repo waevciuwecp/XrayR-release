@@ -1,0 +1,58 @@
+{
+    // =========================================================================
+    // Routing Rules
+    // =========================================================================
+    // Docs: https://xtls.github.io/config/routing.html
+    //
+    // Rules are evaluated top-to-bottom. The first match wins.
+    // Unmatched traffic falls through to the default outbound (first freedom).
+    //
+    // outboundTag references the "tag" field in custom_outbound.json
+
+    "domainStrategy": "IPOnDemand",
+    "rules": [
+        // ---- Block private IP ranges ----
+        {
+            "type": "field",
+            "outboundTag": "block",
+            "ip": [
+                "geoip:private"
+            ]
+        },
+
+        // ---- Block BitTorrent ----
+        {
+            "type": "field",
+            "outboundTag": "block",
+            "protocol": [
+                "bittorrent"
+            ]
+        },
+
+        // ---- Route specific domains through SOCKS5-WARP ----
+        {
+            "type": "field",
+            "outboundTag": "socks5-warp",
+            "domain": [
+                "geosite:category-ads-all",
+                "domain:chat.openai.com"
+            ]
+        },
+
+        // ---- Route Netflix via IPv6 ----
+        {
+            "type": "field",
+            "outboundTag": "IPv6_out",
+            "domain": [
+                "geosite:netflix"
+            ]
+        },
+
+        // ---- Catch-all: route everything else via IPv4 freedom ----
+        {
+            "type": "field",
+            "outboundTag": "IPv4_out",
+            "network": "tcp,udp"
+        }
+    ]
+}
