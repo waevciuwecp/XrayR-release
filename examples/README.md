@@ -94,24 +94,29 @@ configuration you find in the upstream docs works here.
 
 ### Common pitfall: Shadowsocks outbound
 
-The Shadowsocks outbound in Xray-core requires server parameters inside a
-`"servers"` array — putting `address`/`port`/`method` directly under
-`"settings"` causes Xray-core to panic with:
+⚠️  **The official Xray-core docs are inconsistent with the actual parser.**
+
+The [upstream docs](https://xtls.github.io/config/outbounds/shadowsocks.html)
+show a flat structure under `settings`:
+
+```json
+// From the docs — does NOT work in practice
+{ "protocol": "shadowsocks", "settings": { "address": "1.2.3.4", "port": 8388, "method": "aes-256-gcm", ... } }
+```
+
+However the Xray-core `infra/conf` parser actually expects server parameters
+wrapped in a `"servers"` array.  The flat form causes a hard panic:
 
 ```
 infra/conf: 0 Shadowsocks server configured.
 ```
 
-**Wrong:**
-```json
-{ "protocol": "shadowsocks", "settings": { "address": "1.2.3.4", "port": 8388, ... } }
-```
+**The form that works (used in these examples):**
 
-**Right:**
 ```json
 { "protocol": "shadowsocks", "settings": { "servers": [{ "address": "1.2.3.4", "port": 8388, ... }] } }
 ```
 
-This is a Xray-core requirement, not XrayR-specific, but it's easy to miss
+This is a Xray-core parser behavior, not XrayR-specific, but it's easy to miss
 since most other outbound protocols use a flat structure.  The example files in
 this directory all use the correct format.
